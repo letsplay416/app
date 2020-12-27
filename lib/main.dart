@@ -11,6 +11,7 @@ import 'services/auth_services.dart';
 import 'ui/widgets/wrapper.dart';
 import 'package:zephyr18112020/ui/screens/splash_screen.dart';
 
+//!Test
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
