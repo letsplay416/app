@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "663943829137",
+    "project_id": "let-s-play-05122020",
+    "storage_bucket": "let-s-play-05122020.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663943829137:android:cc25dc8e24ac5985649130",
+        "android_client_info": {
+          "package_name": "inc.poison.zephyr05122020"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "663943829137-s76ubd8itrq1maroj6ivuq0paq9j2ufm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "inc.poison.zephyr05122020",
+            "certificate_hash": "cf3415dd7aaa9ffbefde25012418066c82a2e7d5"
+          }
+        },
+        {
+          "client_id": "663943829137-fgrga6egq11eujmdmignp4c4t5bd56ae.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrUtmF64cCdM73B1739gML85f1s0hxOUQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "663943829137-fgrga6egq11eujmdmignp4c4t5bd56ae.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
