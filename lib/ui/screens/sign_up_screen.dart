@@ -9,6 +9,8 @@ import 'dart:io';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'on_boarding.dart';
+
 enum currentPage {
   OnBoarding,
   Email,
@@ -16,7 +18,7 @@ enum currentPage {
   Pseudo,
 }
 enum tfType {
-  Pseudo, 
+  Pseudo,
   Pic,
   Mail,
 }
@@ -32,6 +34,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController pseudoController = TextEditingController();
   TextEditingController mailController = TextEditingController();
   TextEditingController picController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    context.nextPage(OnBoardingScreen());
+  }
+
   @override
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User>();

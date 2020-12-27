@@ -25,7 +25,7 @@ class ZoneGamingScreen extends StatelessWidget {
       width: MediaQuery.of(context).size.width - 60,
       child: SafeArea(
         child: Scaffold(
-         body: CustomScrollView(
+          body: CustomScrollView(
             slivers: [
               SliverAppBar(
                 expandedHeight: 170,
@@ -135,7 +135,7 @@ class GameList extends StatelessWidget {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return Center(child: Center(child: CircularProgressIndicator()));
         }
         return Container(
           height: context.screenHeight - 180,
