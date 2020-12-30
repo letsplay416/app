@@ -256,8 +256,6 @@ class _ConversationScreenState extends State<ConversationScreen>
                   style: TextStyle(color: Colors.amber),
                 ),
                 onTap: () {
-                  Navigator.pop(context);
-
                   takePhoto();
                 },
               ),
@@ -271,7 +269,6 @@ class _ConversationScreenState extends State<ConversationScreen>
                   style: TextStyle(color: Colors.amber),
                 ),
                 onTap: () {
-                  Navigator.pop(context);
                   pickImage();
                 },
               ),
@@ -327,7 +324,6 @@ class _ConversationScreenState extends State<ConversationScreen>
     setState(() {
       img = cropped;
     });
-    
   }
 
   _inputWidget() {

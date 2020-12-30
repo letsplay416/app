@@ -38,7 +38,7 @@ class ActuScreen extends StatelessWidget {
               _backBtn(context, "News"),
               _lPPic(
                 context,
-                12,
+                snapshot.data.data()["time"],
                 snapshot.data.data()["title"],
                 snapshot.data.data()["desc"],
               ),

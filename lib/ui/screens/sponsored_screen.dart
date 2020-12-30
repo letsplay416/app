@@ -46,11 +46,15 @@ class SponsoredScreen extends StatelessWidget {
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.open_in_browser),
             onPressed: () async {
-              const url = 'https://flutter.dev';
-              if (await canLaunch(url)) {
-                await launch(url);
-              } else {
-                throw 'Could not launch $url';
+              String url = snapshot.data.data()["link"];
+              try {
+                if (await canLaunch(url)) {
+                  await launch(url);
+                } else {
+                  throw 'Could not launch $url';
+                }
+              } catch (e) {
+                print(e);
               }
             },
           ),

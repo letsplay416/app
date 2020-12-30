@@ -18,7 +18,11 @@ class PostsCarousel extends StatelessWidget {
     CollectionReference users = FirebaseFirestore.instance.collection('Posts');
 
     return StreamBuilder<QuerySnapshot>(
-      stream: users.snapshots(),
+      stream: users
+          .where("time",
+              isGreaterThanOrEqualTo: DateTime.now().millisecondsSinceEpoch)
+          .orderBy("time", descending: true)
+          .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return Container(
@@ -316,9 +320,11 @@ class PostCard extends StatelessWidget {
                                 color: Colors.white,
                               ),
                             ),
-                            Text(toCurrencyString(
-                                "${DateTime.now().millisecondsSinceEpoch / 599999001 + views}",
-                                shorteningPolicy: ShorteningPolicy.Automatic))
+                            views > 888
+                                ? Text(toCurrencyString("$views",
+                                    shorteningPolicy:
+                                        ShorteningPolicy.Automatic))
+                                : Text(views.toString())
                           ],
                         ),
                         Spacer(),
@@ -428,7 +434,7 @@ class PostCard extends StatelessWidget {
           );
         }
 
-        return Center(child: CircularProgressIndicator());
+        return Center(child: Container());
       },
     );
   }

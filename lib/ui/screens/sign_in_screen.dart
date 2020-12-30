@@ -12,6 +12,7 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
+
 class SignInPage extends StatefulWidget {
   @override
   _SignInPageState createState() => _SignInPageState();
@@ -44,6 +45,9 @@ class _SignInPageState extends State<SignInPage> {
           context.read<AuthServices>().verificationCompleted(credential);
         },
         verificationFailed: (FirebaseAuthException e) {
+          setState(() {
+            loading = false;
+          });
           if (e.code == 'invalid-phone-number') {
             ctx.showToast(
                 msg: "Le numéro de téléphone fourni n'est pas valable.",
@@ -51,11 +55,6 @@ class _SignInPageState extends State<SignInPage> {
                 position: VxToastPosition.top,
                 bgColor: Theme.of(ctx).primaryColor);
           }
-          ctx.showToast(
-              msg: e.code,
-              textColor: Theme.of(ctx).accentColor,
-              position: VxToastPosition.top,
-              bgColor: Theme.of(ctx).primaryColor);
         },
         timeout: const Duration(seconds: 60),
         codeAutoRetrievalTimeout: (verificationId) {},
@@ -211,7 +210,7 @@ class _SignInPageState extends State<SignInPage> {
           ),
           height: 60,
           child: TextFormField(
-              inputFormatters: [PhoneInputFormatter()],
+            inputFormatters: [PhoneInputFormatter()],
             keyboardType: TextInputType.phone,
             autofocus: false,
             style: TextStyle(

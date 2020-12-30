@@ -443,7 +443,11 @@ class Vote extends StatelessWidget {
                               style:
                                   TextStyle(color: Colors.white, fontSize: 20),
                             ),
-                            onPressed: () {
+                            onPressed: () async {
+                              await FirebaseFirestore.instance
+                                  .collection('AppData')
+                                  .doc("vote")
+                                  .update({"total1": ++data["total1"]});
                               Navigator.pop(context);
                             },
                           ),
@@ -454,7 +458,11 @@ class Vote extends StatelessWidget {
                               style:
                                   TextStyle(color: Colors.white, fontSize: 20),
                             ),
-                            onPressed: () {
+                            onPressed: () async {
+                              await FirebaseFirestore.instance
+                                  .collection('AppData')
+                                  .doc("vote")
+                                  .update({"total2": ++data["total2"]});
                               Navigator.pop(context);
                             },
                           ),
