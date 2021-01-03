@@ -89,7 +89,7 @@ class MissionRow extends StatelessWidget {
         padding: EdgeInsets.all(15.0),
         child: Row(
           children: <Widget>[
-            img.circlularNetworkImage(radius: 35,),
+            img.circularNetworkImage(radius: 35),
             SizedBox(
               width: 15,
             ),
