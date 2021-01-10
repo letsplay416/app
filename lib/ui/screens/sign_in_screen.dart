@@ -54,6 +54,12 @@ class _SignInPageState extends State<SignInPage> {
                 textColor: Theme.of(ctx).accentColor,
                 position: VxToastPosition.top,
                 bgColor: Theme.of(ctx).primaryColor);
+          } else {
+            ctx.showToast(
+                msg: e.message,
+                textColor: Theme.of(ctx).accentColor,
+                position: VxToastPosition.top,
+                bgColor: Theme.of(ctx).primaryColor);
           }
         },
         timeout: const Duration(seconds: 60),
@@ -212,7 +218,6 @@ class _SignInPageState extends State<SignInPage> {
           child: TextFormField(
             inputFormatters: [PhoneInputFormatter()],
             keyboardType: TextInputType.phone,
-            autofocus: false,
             style: TextStyle(
               color: Colors.white,
             ),
@@ -250,12 +255,20 @@ class _SignInPageState extends State<SignInPage> {
             focusColor: Color(0xFF0b032d),
             borderSide: BorderSide(color: Color(0xFF0b032d), width: 2),
             onPressed: () async {
-              setState(() {
-                loading = true;
-              });
-              verifyNumber(
-                ctx: context,
-              );
+              if (phoneController.text.isEmpty) {
+                context.showToast(
+                    msg: "Entrez votre Numéro de Téléphone.",
+                    textColor: Theme.of(context).accentColor,
+                    position: VxToastPosition.top,
+                    bgColor: Theme.of(context).primaryColor);
+              } else {
+                setState(() {
+                  loading = true;
+                });
+                verifyNumber(
+                  ctx: context,
+                );
+              }
             },
             padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
             child: Text(

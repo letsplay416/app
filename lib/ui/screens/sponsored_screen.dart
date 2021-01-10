@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class SponsoredScreen extends StatelessWidget {
   final String id;
@@ -51,6 +52,11 @@ class SponsoredScreen extends StatelessWidget {
                 if (await canLaunch(url)) {
                   await launch(url);
                 } else {
+                  context.showToast(
+                    msg: "Aucun lien de disponible actuellement",
+                    textColor: context.primaryColor,
+                    bgColor: context.accentColor,
+                  );
                   throw 'Could not launch $url';
                 }
               } catch (e) {
@@ -228,6 +234,7 @@ class SponsoredScreen extends StatelessWidget {
               "Let's Play",
               style: GoogleFonts.quando(
                 fontSize: 50.0,
+                color: Vx.randomPrimaryColor,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1.0,
                 height: 1.5,

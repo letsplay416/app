@@ -667,7 +667,7 @@ class GetPseudo extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done &&
             snapshot.hasData) {
           return Text(
-            snapshot.data["pseudo"], //  sendBy,
+            snapshot.data["pseudo"], 
             style: TextStyle(
               color: Vx.randomPrimaryColor,
               fontSize: 15.0,

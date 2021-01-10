@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+// import 'package:velocity_x/velocity_x.dart';
 class SplashScreen extends StatefulWidget {
   static const namedRoute = "/splash-screen";
   @override
@@ -14,9 +15,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(
-      Duration(seconds: 5),
+      Duration(seconds: 4),
       () {
-        // print('LANCEMENT DE L\'APPLI !!!!');
         Navigator.pop(context);
       },
     );
@@ -27,14 +27,11 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).accentColor,
       body: Column(
-        // mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        // fit: StackFit.expand,
         children: <Widget>[
           Expanded(
             flex: 2,
             child: Container(
-              // width: MediaQuery.of(context).size.width,
               child: Center(
                 child: Text(""),
               ),
@@ -43,7 +40,6 @@ class _SplashScreenState extends State<SplashScreen> {
           Expanded(
             flex: 8,
             child: Container(
-              // width: MediaQuery.of(context).size.width,
               child: Container(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -66,7 +62,41 @@ class _SplashScreenState extends State<SplashScreen> {
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
-                    )
+                    ),
+                    //!taka partenariat
+                    // Column(
+                    //   crossAxisAlignment: CrossAxisAlignment.end,
+                    //   children: [
+                    //     Text(
+                    //       "Let's Play",
+                    //       style: GoogleFonts.quando(
+                    //         fontSize: 24.0,
+                    //         color: Colors.white,
+                    //         fontWeight: FontWeight.bold,
+                    //       ),
+                    //     ),
+                    //     RichText(
+                    //       text: TextSpan(
+                    //         text: 'with ',
+                    //         style: TextStyle(fontStyle: FontStyle.italic,
+                    //           color: context.primaryColor.withOpacity(
+                    //             0.7,
+                    //           ),
+                    //         ),
+                    //         children: <TextSpan>[
+                    //           TextSpan(
+                    //             text: 'Taka Gaming',
+                    //             style: GoogleFonts.quando(
+                    //               fontSize: 12.0,
+                    //               color: Colors.white,
+                    //               fontWeight: FontWeight.bold,
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 ),
               ),
@@ -75,7 +105,6 @@ class _SplashScreenState extends State<SplashScreen> {
           Expanded(
             flex: 2,
             child: Container(
-              // width: MediaQuery.of(context).size.width,
               child: Center(
                 child: SpinKitChasingDots(
                   color: Theme.of(context).primaryColor,
