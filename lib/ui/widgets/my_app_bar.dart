@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 PreferredSize myAppBar(
     {@required BuildContext context,
@@ -41,10 +42,12 @@ PreferredSize myAppBar(
             ),
             Text(
               title,
-              style: TextStyle(
-                color: Theme.of(context).accentColor,
+              style: GoogleFonts.quando(
                 fontWeight: FontWeight.bold,
+                color: Theme.of(context).accentColor,
                 fontSize: 30.0,
+                letterSpacing: 1.0,
+                height: 1.5,
               ),
             )
           ],

@@ -130,6 +130,36 @@ class MainPage extends StatelessWidget {
               return Container();
             }
           }),
+      floatingActionButton: FutureBuilder(
+          future: FirebaseFirestore.instance
+              .collection("AppData")
+              .doc("isLive")
+              .get(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.hasData) {
+              if (snapshot.data['isLive']) {
+                return FloatingActionButton(
+                  backgroundColor: Colors.transparent,
+                  onPressed: () async {
+                    if (await canLaunch(snapshot.data['link'])) {
+                      await launch(snapshot.data['link']);
+                    } else {
+                      throw 'Could not launch The link';
+                    }
+                  },
+                  child: Image.asset(
+                    "assets/images/youtube.png",
+                    fit: BoxFit.cover,
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            } else {
+              return Container();
+            }
+          }),
     );
   }
 

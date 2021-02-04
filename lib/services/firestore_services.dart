@@ -54,7 +54,11 @@ class FirestoreServices {
   }
 
   Future<dynamic> addAbet(
-      {String userUid, int amount, String eventId, String equipe}) {
+      {String userUid,
+      int amount,
+      String eventId,
+      String equipe,
+      int previousCoins}) {
     return _firebaseFirestore
         .collection("Events")
         .doc(eventId)
@@ -73,7 +77,13 @@ class FirestoreServices {
         "amount": amount,
         "player": equipe,
       });
-    });
+    }).then((value) => {
+              _firebaseFirestore
+                  .collection("Users")
+                  .doc(userUid)
+                  .update({"coins": previousCoins - amount}).catchError(
+                      (error) => print("Failed to add user: $error"))
+            });
   }
 
   Future<dynamic> userRegistration({

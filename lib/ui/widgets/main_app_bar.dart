@@ -50,61 +50,76 @@ _aBtn(BuildContext context) {
 }
 
 Widget _notifBtn(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: InkWell(
-      borderRadius: BorderRadius.circular(100),
-      splashColor: Theme.of(context).accentColor,
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (context) => Vote(),
-        );
-      },
-      child: Stack(
-        overflow: Overflow.visible,
-        alignment: Alignment.topRight,
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 0),
-            decoration: new BoxDecoration(
-              shape: BoxShape.circle,
-              color: Theme.of(context).accentColor.withOpacity(0.2),
-            ),
-            child: Icon(
-              Icons.notifications_active,
-              color: Colors.white.withOpacity(0.8),
-            ),
-            width: (MediaQuery.of(context).size.width - 60) * 0.1,
-            height: 40,
-          ),
-          Container(
-            height: 16,
-            width: 16,
-            decoration: BoxDecoration(
-              color: Theme.of(context).accentColor,
-              shape: BoxShape.circle,
-              border: Border.all(
-                width: 2,
-                color: Theme.of(context).primaryColor,
-              ),
-            ),
-            child: Center(
-              child: Text(
-                "1",
-                style: TextStyle(
-                  fontSize: 9,
-                  height: 1,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
+  CollectionReference users = FirebaseFirestore.instance.collection('AppData');
+  return FutureBuilder<DocumentSnapshot>(
+      future: users.doc("vote").get(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasData) {
+          return snapshot.data["isMessage"]
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(100),
+                    splashColor: Theme.of(context).accentColor,
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => Vote(),
+                      );
+                    },
+                    child: Stack(
+                      overflow: Overflow.visible,
+                      alignment: Alignment.topRight,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.symmetric(vertical: 0),
+                          decoration: new BoxDecoration(
+                            shape: BoxShape.circle,
+                            color:
+                                Theme.of(context).accentColor.withOpacity(0.2),
+                          ),
+                          child: Icon(
+                            Icons.notifications_active,
+                            color: Colors.white.withOpacity(0.8),
+                          ),
+                          width: (MediaQuery.of(context).size.width - 60) * 0.1,
+                          height: 40,
+                        ),
+                        Container(
+                          height: 16,
+                          width: 16,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).accentColor,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              width: 2,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "1",
+                              style: TextStyle(
+                                fontSize: 9,
+                                height: 1,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              : SizedBox(
+                  width: 20,
+                );
+        } else {
+          return Container();
+        }
+      });
 }
 
 Widget _walletButton(BuildContext context) {
@@ -362,118 +377,54 @@ class Vote extends StatelessWidget {
 
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data = snapshot.data.data();
-          return Container(
-            child: Center(
-              child: AlertDialog(
-                backgroundColor: context.theme.primaryColor,
-                content: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.transparent,
-                      backgroundImage: AssetImage(
-                        "assets/images/logo.png",
-                      ),
-                      maxRadius: 40,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        data["title"] ?? "",
-                        style: TextStyle(
-                          fontFamily: "Quando",
-                          color: Theme.of(context).accentColor,
-                          fontSize: 30.0,
-                          decoration: TextDecoration.none,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Text(
-                        data["text"] ?? "",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 20,
-                          decoration: TextDecoration.none,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(30),
-                        child: Container(
-                          width: double.infinity,
-                          height: 20,
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                flex: data["total1"] == 0 ? 1 : data["total1"],
-                                child: Container(
-                                  child: Center(child: Text("")),
-                                  color: Colors.redAccent,
-                                ),
-                              ),
-                              Expanded(
-                                flex: data["total2"] == 0 ? 1 : data["total2"],
-                                child: Container(
-                                  child: Center(child: Text("")),
-                                  color: Colors.blueAccent,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+          return data["isMessage"]
+              ? Container(
+                  child: Center(
+                    child: AlertDialog(
+                      backgroundColor: context.theme.primaryColor,
+                      content: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          RaisedButton(
-                            color: Colors.redAccent,
-                            child: Text(
-                              data["answer1"],
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
+                          CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            backgroundImage: AssetImage(
+                              "assets/images/logo.png",
                             ),
-                            onPressed: () async {
-                              await FirebaseFirestore.instance
-                                  .collection('AppData')
-                                  .doc("vote")
-                                  .update({"total1": ++data["total1"]});
-                              Navigator.pop(context);
-                            },
+                            maxRadius: 40,
                           ),
-                          RaisedButton(
-                            color: Colors.blueAccent,
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              data["answer2"],
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
+                              data["title"] ?? "",
+                              style: TextStyle(
+                                fontFamily: "Quando",
+                                color: Theme.of(context).accentColor,
+                                fontSize: 30.0,
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                            onPressed: () async {
-                              await FirebaseFirestore.instance
-                                  .collection('AppData')
-                                  .doc("vote")
-                                  .update({"total2": ++data["total2"]});
-                              Navigator.pop(context);
-                            },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              data["text"] ?? "",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 20,
+                                decoration: TextDecoration.none,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-          );
+                  ),
+                )
+              : Container();
         }
 
         return Container();

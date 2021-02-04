@@ -9,7 +9,6 @@ import 'package:zephyr18112020/ui/widgets/my_app_bar.dart';
 import 'package:flutter_multi_formatter/formatters/money_input_formatter.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_multi_formatter/formatters/money_input_enums.dart';
-import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -189,27 +188,6 @@ class BetList extends StatelessWidget {
         }
       },
     );
-    return Container(
-      height: 400,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            "Aucun pari",
-            style: TextStyle(color: Color(0xFFe5e5e5), fontSize: 20),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Container(
-              child: Image.asset(
-            "assets/images/gaming.png",
-            fit: BoxFit.cover,
-            height: 200,
-          )),
-        ],
-      ),
-    );
   }
 }
 
@@ -250,10 +228,6 @@ class _WalletState extends State<Wallet> {
                     ),
                   ],
                 ),
-              ),
-              GestureDetector(
-                onTap: () {},
-                child: Icon(FontAwesomeIcons.question),
               ),
             ],
           ),
@@ -306,7 +280,8 @@ class CardStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 220, padding: EdgeInsets.all(8.0),
+      height: 180,
+      padding: EdgeInsets.all(8.0),
       margin: EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -325,13 +300,6 @@ class CardStatus extends StatelessWidget {
               width: 40,
               height: 40,
               child: Icon(iconName),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Text(
-              "[+$newCases]",
-              style: TextStyle(color: colorCard, fontSize: 15),
             ),
             SizedBox(
               height: 15,

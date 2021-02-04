@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,7 +16,10 @@ import 'package:flutter_multi_formatter/formatters/money_input_enums.dart';
 import 'package:flutter_multi_formatter/formatters/money_input_formatter.dart';
 import 'package:flutter_unicons/flutter_unicons.dart';
 import 'package:flutter_unicons/model.dart';
+import 'package:zephyr18112020/ui/screens/vippage.dart';
 import 'package:zephyr18112020/ui/widgets/my_app_bar.dart';
+
+import 'package:url_launcher/url_launcher.dart';
 
 class GetProfilPic extends StatefulWidget {
   final User user;
@@ -168,10 +173,10 @@ class _GetProfilPicState extends State<GetProfilPic> {
     return Scaffold(
       appBar: myAppBar(
         context: context,
-        title: "Mon Profil",
+        title: "Profil",
         todo: () => context.pop(),
       ),
-      body: Column(
+      body: ListView(
         children: [
           GestureDetector(
             onTap: () => showModalBottomSheet(
@@ -278,26 +283,42 @@ class _GetProfilPicState extends State<GetProfilPic> {
               textAlign: TextAlign.center,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 150, vertical: 20),
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  color: data["isVip"]
-                      ? Colors.amber.withOpacity(0.8)
-                      : context.accentColor.withOpacity(0.8)),
-              width: 100,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  data["isVip"] ? "V.I.P" : "Passer V.I.P",
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.quando(
-                    fontSize: data["isVip"] ? 20.0 : 11,
-                    fontWeight:
-                        data["isVip"] ? FontWeight.bold : FontWeight.normal,
-                    letterSpacing: 1.0,
-                    // height: 1.5,
+          GestureDetector(
+            onTap: () async {
+              if (data["isVip"]) {
+                context.showToast(
+                    msg: "Vous êtes déjà V.I.P",
+                    textColor: Colors.amberAccent,
+                    showTime: 4000,
+                    position: VxToastPosition.center,
+                    bgColor: Theme.of(context).primaryColor);
+              } else {
+                context.pop();
+                context.nextPage(Vip());
+              }
+            },
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 150, vertical: 20),
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color: data["isVip"]
+                        ? Colors.amber.withOpacity(0.8)
+                        : context.accentColor.withOpacity(0.8)),
+                width: 100,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    data["isVip"] ? "V.I.P" : "Passer V.I.P",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.quando(
+                      fontSize: data["isVip"] ? 20.0 : 11,
+                      fontWeight:
+                          data["isVip"] ? FontWeight.bold : FontWeight.normal,
+                      letterSpacing: 1.0,
+                      // height: 1.5,
+                    ),
                   ),
                 ),
               ),
@@ -485,33 +506,75 @@ class _GetProfilPicState extends State<GetProfilPic> {
               ),
             ],
           ),
-          Expanded(child: Container()),
+          SizedBox(
+            height: 80,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: Text(
+                  "Let's Play",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.quando(
+                    fontSize: 20.0,
+                    color: Colors.redAccent,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.0,
+                    height: 1.5,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: Text(
+                  "with TAKA Games",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.grey, fontStyle: FontStyle.normal),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 2.0),
+                child: Text(
+                  "Quand le virtuel défie le réel!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.redAccent, fontStyle: FontStyle.italic),
+                ),
+              ),
+            ],
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               socialNetwork(
                   color: Color(0xFFE1306C),
-                  press: () {},
+                  link:
+                      "https://instagram.com/lets_play4.16?igshid=cg9qqe7pvfud",
                   icon: UniconData.uniInstagram,
                   text: "Instagram"),
               socialNetwork(
                   color: Color(0xFF4AC959),
-                  press: () {},
+                  link: "https://wa.link/h6rt9a",
                   icon: UniconData.uniWhatsapp,
                   text: "WhatsApp"),
               socialNetwork(
                   color: Color(0xFFFFFC00),
-                  press: () {},
+                  link:
+                      "https://play.google.com/store/apps/details?id=inc.poison.zephyr05122020&gl=FR",
                   icon: UniconData.uniGooglePlay,
                   text: "Play Store"),
               socialNetwork(
                   color: Colors.blueAccent,
-                  press: () {},
+                  link: "https://www.facebook.com/LetsPlay4.16",
                   icon: UniconData.uniFacebook,
                   text: "FaceBook"),
               socialNetwork(
                   color: Color(0xFFFF0000),
-                  press: () {},
+                  link:
+                      "https://www.youtube.com/channel/UCZDJnC83Hjt1h-A6c95gpjQ",
                   icon: UniconData.uniYoutube,
                   text: "YouTube"),
             ],
@@ -521,17 +584,17 @@ class _GetProfilPicState extends State<GetProfilPic> {
     );
   }
 
-  socialNetwork({
-    Color color,
-    GestureTapCallback press,
-    UniconDataModel icon,
-    String text,
-    String link,
-  }) {
+  socialNetwork({Color color, UniconDataModel icon, String text, String link}) {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 5),
       child: GestureDetector(
-        onTap: press,
+        onTap: () async {
+          if (await canLaunch(link)) {
+            await launch(link);
+          } else {
+            throw 'Could not launch wha link';
+          }
+        },
         child: SizedBox(
           width: 55,
           child: Column(

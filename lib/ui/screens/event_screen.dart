@@ -396,11 +396,11 @@ class EventScreen extends StatelessWidget {
               ),
               onPressed: () {
                 ctx.read<FirestoreServices>().addAbet(
-                      amount: mise,
-                      eventId: eventId,
-                      userUid: user.id,
-                      equipe: equipe,
-                    );
+                    amount: mise,
+                    eventId: eventId,
+                    userUid: user.id,
+                    equipe: equipe,
+                    previousCoins: user["coins"]);
                 Navigator.of(ctx).pop();
                 Navigator.of(ctx).pop();
               },
@@ -422,7 +422,13 @@ class EventScreen extends StatelessWidget {
         ),
       );
     } else
-      print("pas assez de ressource");
+      print("pas assez de Coins");
+    ctx.showToast(
+        msg: "Pas assez de Coins",
+        bgColor: ctx.theme.primaryColor,
+        position: VxToastPosition.bottom,
+        textColor: ctx.theme.accentColor,
+        showTime: 4000);
   }
 
   Container _lPPic(BuildContext context, int time, String title, String desc) {
