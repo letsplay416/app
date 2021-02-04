@@ -370,9 +370,9 @@ class _ConversationScreenState extends State<ConversationScreen>
             ),
           ],
         ),
-        onTap: () => moreAction(),
+        // onTap: () => moreAction(),
         onPanUpdate: (details) {
-          if (details.delta.dy < 0) {
+          if (details.delta.dy < 50) {
             moreAction();
           }
         });

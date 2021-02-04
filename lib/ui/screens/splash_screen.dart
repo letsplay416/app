@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-// import 'package:velocity_x/velocity_x.dart';
+import 'package:velocity_x/velocity_x.dart';
 class SplashScreen extends StatefulWidget {
   static const namedRoute = "/splash-screen";
   @override
@@ -55,48 +55,48 @@ class _SplashScreenState extends State<SplashScreen> {
                     Padding(
                       padding: EdgeInsets.only(top: 10.0),
                     ),
-                    Text(
-                      "Let's Play",
-                      style: GoogleFonts.quando(
-                        fontSize: 24.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    //!taka partenariat
-                    // Column(
-                    //   crossAxisAlignment: CrossAxisAlignment.end,
-                    //   children: [
-                    //     Text(
-                    //       "Let's Play",
-                    //       style: GoogleFonts.quando(
-                    //         fontSize: 24.0,
-                    //         color: Colors.white,
-                    //         fontWeight: FontWeight.bold,
-                    //       ),
-                    //     ),
-                    //     RichText(
-                    //       text: TextSpan(
-                    //         text: 'with ',
-                    //         style: TextStyle(fontStyle: FontStyle.italic,
-                    //           color: context.primaryColor.withOpacity(
-                    //             0.7,
-                    //           ),
-                    //         ),
-                    //         children: <TextSpan>[
-                    //           TextSpan(
-                    //             text: 'Taka Gaming',
-                    //             style: GoogleFonts.quando(
-                    //               fontSize: 12.0,
-                    //               color: Colors.white,
-                    //               fontWeight: FontWeight.bold,
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ],
+                    // Text(
+                    //   "Let's Play",
+                    //   style: GoogleFonts.quando(
+                    //     fontSize: 24.0,
+                    //     color: Colors.white,
+                    //     fontWeight: FontWeight.bold,
+                    //   ),
                     // ),
+                    //!taka partenariat
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          "Let's Play",
+                          style: GoogleFonts.quando(
+                            fontSize: 24.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            text: 'with ',
+                            style: TextStyle(fontStyle: FontStyle.italic,
+                              color: context.primaryColor.withOpacity(
+                                0.7,
+                              ),
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: 'Taka Gaming',
+                                style: GoogleFonts.quando(
+                                  fontSize: 12.0,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),

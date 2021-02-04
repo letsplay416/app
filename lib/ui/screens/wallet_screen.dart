@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:zephyr18112020/ui/widgets/chat_item.dart';
 import 'package:zephyr18112020/ui/widgets/my_app_bar.dart';
 import 'package:flutter_multi_formatter/formatters/money_input_formatter.dart';
@@ -38,7 +39,8 @@ class WalletScreen extends StatelessWidget {
               height: 40,
             ),
             Wallet(),
-            BetList([]),
+            myAppBar(context: context, title: "Liste des paris", todo: () {}),
+            BetList(),
           ],
         ),
       ),
@@ -100,16 +102,72 @@ class WalletScreen extends StatelessWidget {
 }
 
 class BetList extends StatelessWidget {
-  final List bets;
-
-  const BetList(this.bets);
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 400,
-      child: bets.isEmpty
-          ? Column(
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection("Users")
+          .doc(context.watch<User>().uid)
+          .collection("bets")
+          .snapshots(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.active &&
+            snapshot.hasData) {
+          return ListView.builder(
+            reverse: true,
+            shrinkWrap: true,
+            itemCount: snapshot.data.documents.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                  leading: new Icon(
+                    FontAwesomeIcons.user,
+                    color: Colors.lightBlue,
+                  ),
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      new Text(
+                        snapshot.data.documents[index]["player"],
+                        style: GoogleFonts.arbutusSlab(
+                          fontSize: 15.0,
+                          color: Vx.randomPrimaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text.rich(
+                        TextSpan(
+                          style: TextStyle(color: Colors.white),
+                          children: [
+                            TextSpan(
+                              text: "Rank: ",
+                              style: GoogleFonts.arbutusSlab(
+                                fontSize: 11.0,
+                                color: Colors.white60,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                            TextSpan(
+                              text: snapshot.data.documents[index]["amount"]
+                                  .toString(),
+                              style: GoogleFonts.arbutusSlab(
+                                fontSize: 11.0,
+                                color: Colors.amberAccent,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          ],
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                  onTap: () => {});
+            },
+          );
+        } else {
+          return Container(
+            height: 400,
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
@@ -126,50 +184,31 @@ class BetList extends StatelessWidget {
                   height: 200,
                 )),
               ],
-            )
-          : ListView.builder(
-              itemBuilder: (context, index) => Card(
-                color: Color(0xFF1b1e44),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.all(10.0),
-                      margin: EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 15,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Theme.of(context).accentColor, width: 2),
-                      ),
-                      child: Text(
-                        bets[index].amount.toStringAsFixed(2),
-                        style: TextStyle(
-                          color: Color(0xFFe5e5e5),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(bets[index].title,
-                            style: TextStyle(
-                              color: Color(0xFFfca311),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            )),
-                        Text(DateFormat('kk:mm:ss').format(bets[index].date),
-                            style: TextStyle(
-                                color: Color.fromRGBO(184, 194, 199, 1.0)))
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              itemCount: bets.length,
             ),
+          );
+        }
+      },
+    );
+    return Container(
+      height: 400,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            "Aucun pari",
+            style: TextStyle(color: Color(0xFFe5e5e5), fontSize: 20),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+              child: Image.asset(
+            "assets/images/gaming.png",
+            fit: BoxFit.cover,
+            height: 200,
+          )),
+        ],
+      ),
     );
   }
 }
@@ -182,7 +221,6 @@ class Wallet extends StatefulWidget {
 }
 
 class _WalletState extends State<Wallet> {
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -270,7 +308,6 @@ class CardStatus extends StatelessWidget {
     return Container(
       height: 220, padding: EdgeInsets.all(8.0),
       margin: EdgeInsets.all(8.0),
-      // width: MediaQuery.of(context).size.width * 0.25,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Color(0xFF2d3447).withOpacity(0.3),

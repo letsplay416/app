@@ -118,8 +118,7 @@ class ChatRoomRowWidget extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      padding: EdgeInsets.all(0.0),
+    return TextButton(
       onPressed: () {
         Navigator.push(
           context,

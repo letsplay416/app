@@ -62,7 +62,17 @@ class FirestoreServices {
         .add({
       "userUid": userUid,
       "amount": amount,
-      "team": equipe,
+      "player": equipe,
+    }).then((value) {
+      _firebaseFirestore
+          .collection("Users")
+          .doc(userUid)
+          .collection("bets")
+          .add({
+        "userUid": userUid,
+        "amount": amount,
+        "player": equipe,
+      });
     });
   }
 
@@ -124,13 +134,21 @@ class FirestoreServices {
     });
   }
 
-  // Future<dynamic> addProfilePicTofs({@required String uid, @required link}) {
-  //   return _firebaseFirestore
-  //       .collection("Users")
-  //       .doc(uid)
-  //       .update({"picture": link}).catchError(
-  //           (error) => print("Failed to add user: $error"));
-  // }
+  Future<dynamic> addProfilePicTofs({@required String uid, @required link}) {
+    return _firebaseFirestore
+        .collection("Users")
+        .doc(uid)
+        .update({"picture": link}).catchError(
+            (error) => print("Failed to add user: $error"));
+  }
+
+  Future<dynamic> editPseudo({@required String uid, @required newPseudo}) {
+    return _firebaseFirestore
+        .collection("Users")
+        .doc(uid)
+        .update({"pseudo": newPseudo}).catchError(
+            (error) => print("Failed to add user: $error"));
+  }
 
   Future<dynamic> addLastMessage({
     @required String chatRoomId,

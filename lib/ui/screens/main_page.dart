@@ -4,24 +4,132 @@ import 'package:provider/provider.dart';
 import 'package:zephyr18112020/ui/screens/home_screen.dart';
 import 'package:zephyr18112020/ui/screens/menu_screen.dart';
 import 'package:zephyr18112020/ui/screens/chat_room_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:loading_overlay/loading_overlay.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:zephyr18112020/ui/screens/zone_gaming_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:zephyr18112020/ui/widgets/get_profil_pic.dart';
 import 'package:flutter_unicons/flutter_unicons.dart';
 import 'package:flutter_unicons/model.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:zephyr18112020/utils/constants.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mainPageProvider = context.watch<MainPageProvider>();
     return Scaffold(
-      body: Row(
-        children: [
-          _sideBar(context, mainPageProvider),
-          _currentPage(mainPageProvider.currentPage),
-        ],
-      ),
+      body: FutureBuilder(
+          future: FirebaseFirestore.instance
+              .collection("AppData")
+              .doc("version")
+              .get(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.hasData) {
+              return LoadingOverlay(
+                isLoading: snapshot.data["name"] != version,
+                progressIndicator: AlertDialog(
+                  title: Text(
+                    "Mise à jour requise !",
+                    style: TextStyle(color: context.theme.accentColor),
+                  ),
+                  backgroundColor: context.theme.primaryColor,
+                  content: Text(
+                    "Vous devez effectuer la mise à jour vers la version ${snapshot.data["name"]}",
+                  ),
+                  actions: [
+                    OutlineButton(
+                      color: Colors.lightBlue,
+                      textColor: Colors.lightBlue,
+                      child: Text("Mettre à jour"),
+                      onPressed: () async {
+                        const url =
+                            'https://play.google.com/store/apps/details?id=inc.poison.zephyr05122020';
+                        if (await canLaunch(url)) {
+                          await launch(url);
+                        } else {
+                          throw 'Could not launch $url';
+                        }
+                      },
+                    ),
+                  ],
+                ),
+                child: FutureBuilder(
+                    future: FirebaseFirestore.instance
+                        .collection("AppData")
+                        .doc("blockUser")
+                        .get(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done &&
+                          snapshot.hasData) {
+                        return LoadingOverlay(
+                          isLoading: snapshot.data["isBlock"],
+                          progressIndicator: Container(
+                            width: double.infinity,
+                            height: 150,
+                            margin: EdgeInsets.all((20)),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: (20),
+                              vertical: (15),
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Theme.of(context).accentColor,
+                            ),
+                            child: ListView(
+                              children: [
+                                Text(
+                                  snapshot.data["title"] ?? "",
+                                  style: GoogleFonts.quando(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.0,
+                                    height: 1.5,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                Text(
+                                  snapshot.data["content"] ?? "",
+                                  maxLines: 6,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.varela(
+                                    fontWeight: FontWeight.w700,
+                                    color: Theme.of(context).primaryColor,
+                                    letterSpacing: 1.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              _sideBar(context, mainPageProvider),
+                              _currentPage(mainPageProvider.currentPage),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return Text(
+                          "", //  sendBy,
+                          style: TextStyle(
+                            color: Theme.of(context).accentColor.withGreen(100),
+                            fontSize: 15.0,
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      }
+                    }),
+              );
+            } else {
+              return Container();
+            }
+          }),
     );
   }
 

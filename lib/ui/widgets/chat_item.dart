@@ -662,7 +662,7 @@ class GetPseudo extends StatelessWidget {
       future: FirebaseFirestore.instance
           .collection("Users")
           .doc(uid)
-          .get(), //! remplacer par "7SbvtFu4miYRcoIz9Yr82UlCO4w1"
+          .get(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done &&
             snapshot.hasData) {

@@ -6,8 +6,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:zephyr18112020/services/firestore_services.dart';
-
+import 'package:velocity_x/velocity_x.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class EventScreen extends StatelessWidget {
   final String id;
@@ -46,10 +47,10 @@ class EventScreen extends StatelessWidget {
               ),
               _betBtn(
                 ctx: context,
-                cote: snapshot.data.data()["cote"].toDouble(),
                 eventId: snapshot.data.data()["id"],
-                mise: snapshot.data.data()["mise"].toInt(),
+                gain: snapshot.data.data()["gain"].toInt(),
                 type: snapshot.data.data()["type"],
+                mise: snapshot.data.data()["mise"],
               ),
             ],
           ),
@@ -60,7 +61,7 @@ class EventScreen extends StatelessWidget {
 
   Align _betBtn({
     BuildContext ctx,
-    double cote,
+    int gain,
     int mise,
     String type,
     String eventId,
@@ -90,99 +91,264 @@ class EventScreen extends StatelessWidget {
               color: Colors.white),
           child: IconButton(
             onPressed: () {
-              type == "daily"
-                  ? showModalBottomSheet(
-                      context: ctx,
-                      backgroundColor: Colors.transparent,
-                      builder: (BuildContext bc) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(ctx).primaryColor,
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(20.0),
-                                topLeft: Radius.circular(20.0)),
-                          ),
-                          child: new Wrap(
-                            children: <Widget>[
-                              Container(
-                                padding: EdgeInsets.all(12),
-                                width: double.infinity,
-                                child: Text.rich(
-                                  TextSpan(
-                                    style: TextStyle(color: Colors.white),
-                                    children: [
+              type == "Soon"
+                  ? ctx.showToast(
+                      msg: "Aucun pari de disponible",
+                      bgColor: ctx.theme.primaryColor,
+                      textColor: ctx.theme.accentColor,
+                    )
+                  : type == "daily"
+                      ? showModalBottomSheet(
+                          context: ctx,
+                          backgroundColor: Colors.transparent,
+                          builder: (BuildContext bc) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(ctx).primaryColor,
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(20.0),
+                                    topLeft: Radius.circular(20.0)),
+                              ),
+                              child: new Wrap(
+                                children: <Widget>[
+                                  Container(
+                                    padding: EdgeInsets.all(12),
+                                    width: double.infinity,
+                                    child: Text.rich(
                                       TextSpan(
-                                        text: "Vous misez: ",
+                                        style: TextStyle(color: Colors.white),
+                                        children: [
+                                          TextSpan(
+                                            text: "Vous misez: ",
+                                            style: GoogleFonts.arbutusSlab(
+                                              fontSize: 15.0,
+                                              color: Colors.white60,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: "$mise Coin(s)",
+                                            style: GoogleFonts.arbutusSlab(
+                                              fontSize: 15.0,
+                                              color: Colors.amberAccent,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  Container(
+                                    width: double.infinity,
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 30, vertical: 5),
+                                    color: Colors.amber.withOpacity(0.2),
+                                    height: 2,
+                                  ),
+                                  ListTile(
+                                      leading: new Icon(Icons.music_note),
+                                      title: new Text(
+                                        'Blue Team',
                                         style: GoogleFonts.arbutusSlab(
                                           fontSize: 15.0,
-                                          color: Colors.white60,
+                                          color: Colors.lightBlue,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      TextSpan(
-                                        text: "$mise Coin(s)",
-                                        style: GoogleFonts.arbutusSlab(
-                                          fontSize: 15.0,
-                                          color: Colors.amberAccent,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      )
-                                    ],
+                                      onTap: () => {
+                                            _bet(
+                                              mise: mise,
+                                              equipe: "Blue Team",
+                                              ctx: ctx,
+                                              eventId: eventId,
+                                              gain: gain,
+                                            )
+                                          }),
+                                  ListTile(
+                                    leading: new Icon(Icons.videocam),
+                                    title: new Text(
+                                      'Red Team',
+                                      style: GoogleFonts.arbutusSlab(
+                                        fontSize: 15.0,
+                                        color: Colors.redAccent,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    onTap: () => {
+                                      _bet(
+                                        ctx: ctx,
+                                        mise: mise,
+                                        equipe: "Red Team",
+                                        eventId: eventId,
+                                        gain: gain,
+                                      ),
+                                    },
                                   ),
-                                  textAlign: TextAlign.center,
-                                ),
+                                ],
                               ),
-                              Container(
-                                width: double.infinity,
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 5),
-                                color: Colors.amber.withOpacity(0.2),
-                                height: 2,
+                            );
+                          })
+                      : showModalBottomSheet(
+                          context: ctx,
+                          backgroundColor: Colors.transparent,
+                          builder: (BuildContext bc) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(ctx).primaryColor,
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(20.0),
+                                    topLeft: Radius.circular(20.0)),
                               ),
-                              ListTile(
-                                  leading: new Icon(Icons.music_note),
-                                  title: new Text(
-                                    'Blue Team',
-                                    style: GoogleFonts.arbutusSlab(
-                                      fontSize: 15.0,
-                                      color: Colors.lightBlue,
-                                      fontWeight: FontWeight.bold,
+                              child: new Wrap(
+                                children: <Widget>[
+                                  Container(
+                                    padding: EdgeInsets.all(12),
+                                    width: double.infinity,
+                                    child: Text.rich(
+                                      TextSpan(
+                                        style: TextStyle(color: Colors.white),
+                                        children: [
+                                          TextSpan(
+                                            text: "Vous misez:",
+                                            style: GoogleFonts.arbutusSlab(
+                                              fontSize: 15.0,
+                                              color: Colors.white60,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: "$mise Coin(s)",
+                                            style: GoogleFonts.arbutusSlab(
+                                              fontSize: 15.0,
+                                              color: Colors.amberAccent,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
                                   ),
-                                  onTap: () => {
-                                        _bet(
-                                          cote: cote,
-                                          equipe: "Blue Team",
-                                          ctx: ctx,
-                                          eventId: eventId,
-                                          mise: mise,
-                                        )
-                                      }),
-                              ListTile(
-                                leading: new Icon(Icons.videocam),
-                                title: new Text(
-                                  'Red Team',
-                                  style: GoogleFonts.arbutusSlab(
-                                    fontSize: 15.0,
-                                    color: Colors.redAccent,
-                                    fontWeight: FontWeight.bold,
+                                  Container(
+                                    width: double.infinity,
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 30, vertical: 5),
+                                    color: Colors.amber.withOpacity(0.2),
+                                    height: 2,
                                   ),
-                                ),
-                                onTap: () => {
-                                  _bet(
-                                    cote: cote,
-                                    ctx: ctx,
-                                    equipe: "Red Team",
-                                    eventId: eventId,
-                                    mise: mise,
-                                  )
-                                },
+                                  Container(
+                                    height: ctx.screenHeight * 0.33,
+                                    child: StreamBuilder(
+                                      stream: FirebaseFirestore.instance
+                                          .collection("Events")
+                                          .doc(eventId)
+                                          .snapshots(),
+                                      initialData: Container(),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot snapshot) {
+                                        if (snapshot.hasError) {
+                                          return Container();
+                                        }
+
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return CircularProgressIndicator();
+                                        }
+                                        return ListView.separated(
+                                          separatorBuilder: (context, index) =>
+                                              Container(
+                                            width: 50,
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 150, vertical: 5),
+                                            color: Colors.grey.withOpacity(0.4),
+                                            height: 2,
+                                          ),
+                                          itemCount: snapshot
+                                              .data["playerList"].length,
+                                          itemBuilder: (context, index) {
+                                            return ListTile(
+                                                leading: new Icon(
+                                                  FontAwesomeIcons.user,
+                                                  color: Colors.lightBlue,
+                                                ),
+                                                title: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    new Text(
+                                                      snapshot.data[
+                                                              "playerList"]
+                                                          [index]["name"],
+                                                      style: GoogleFonts
+                                                          .arbutusSlab(
+                                                        fontSize: 15.0,
+                                                        color: Vx
+                                                            .randomPrimaryColor,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    Text.rich(
+                                                      TextSpan(
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                        children: [
+                                                          TextSpan(
+                                                            text: "Rank: ",
+                                                            style: GoogleFonts
+                                                                .arbutusSlab(
+                                                              fontSize: 11.0,
+                                                              color: Colors
+                                                                  .white60,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal,
+                                                            ),
+                                                          ),
+                                                          TextSpan(
+                                                            text: snapshot.data[
+                                                                    "playerList"]
+                                                                    [index]
+                                                                    ["rank"]
+                                                                .toString(),
+                                                            style: GoogleFonts
+                                                                .arbutusSlab(
+                                                              fontSize: 11.0,
+                                                              color: Colors
+                                                                  .amberAccent,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ],
+                                                ),
+                                                onTap: () => {
+                                                      _bet(
+                                                          equipe: snapshot.data[
+                                                                  "playerList"]
+                                                              [index]["name"],
+                                                          ctx: ctx,
+                                                          eventId: eventId,
+                                                          gain: gain,
+                                                          mise: mise),
+                                                    });
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        );
-                      })
-                  : print("Ouvrir la page des extra");
+                            );
+                          });
             },
             icon: Icon(
               Icons.play_arrow_sharp,
@@ -197,16 +363,16 @@ class EventScreen extends StatelessWidget {
 
   Future _bet({
     BuildContext ctx,
-    int mise,
-    double cote,
+    int gain,
     String equipe,
     String eventId,
+    int mise,
   }) async {
     var user = await FirebaseFirestore.instance
         .collection("Users")
-        .doc(ctx.read<User>().uid) 
+        .doc(ctx.read<User>().uid)
         .get();
-    if (user["coins"] >= mise) {
+    if (user["coins"] >= gain) {
       return showDialog(
         context: ctx,
         builder: (_) => new CupertinoAlertDialog(
@@ -218,9 +384,9 @@ class EventScreen extends StatelessWidget {
             ),
           ),
           content: new Text(
-              "Si tu confirmes ce pari, tu remporteras ${mise * cote} Coins si la $equipe gagne. Mais si tu veux annuler, appui sur le bouton 'Annuler'."),
+              "Si tu confirmes ce pari, tu remporteras environ $gain Coins si $equipe gagne. Mais si tu veux annuler, appui sur le bouton 'Annuler'."),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text(
                 'C\'est parti!',
                 style: GoogleFonts.arbutusSlab(
@@ -239,7 +405,7 @@ class EventScreen extends StatelessWidget {
                 Navigator.of(ctx).pop();
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text(
                 'Annuler',
                 style: GoogleFonts.arbutusSlab(
@@ -322,7 +488,7 @@ class EventScreen extends StatelessWidget {
                     padding:
                         EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
                     child: Text(
-                      DateFormat('kk:mm')
+                      DateFormat('kk:mm - dd/MM/yyyy')
                               .format(
                                 DateTime.fromMillisecondsSinceEpoch(
                                   time,

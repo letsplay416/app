@@ -170,9 +170,11 @@ class Recharge extends StatelessWidget {
                   ),
                   ProfileListItem(
                     text: 'MTN: +229 ${snapshot.data["mtn"]}',
+                    numero: snapshot.data["mtn"],
                   ),
                   ProfileListItem(
                     text: 'MOOV:+229 ${snapshot.data["moov"]}',
+                    numero: snapshot.data["moov"],
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10.0),

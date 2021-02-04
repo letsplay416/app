@@ -6,10 +6,13 @@ import 'package:flutter_unicons/flutter_unicons.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:zephyr18112020/utils/constants.dart';
+import 'package:zephyr18112020/services/firestore_services.dart';
 
 class MenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    TextEditingController textctrl = TextEditingController();
     return Container(
       width: MediaQuery.of(context).size.width - 60,
       child: SafeArea(
@@ -50,7 +53,6 @@ class MenuScreen extends StatelessWidget {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            TextEditingController textctrl;
                             showDialog(
                                 context: context,
                                 barrierColor:
@@ -64,17 +66,38 @@ class MenuScreen extends StatelessWidget {
                                         controller: textctrl,
                                       )),
                                       actions: [
-                                        RaisedButton(
+                                        ElevatedButton(
                                           onPressed: () {
+                                            if (textctrl.text.trim() !=
+                                                "Super User") {
+                                              context
+                                                  .read<FirestoreServices>()
+                                                  .editPseudo(
+                                                      uid: context
+                                                          .read<User>()
+                                                          .uid,
+                                                      newPseudo:
+                                                          textctrl.text.trim());
+                                              context.showToast(
+                                                  msg: "Pseudo changé",
+                                                  bgColor: context
+                                                      .theme.primaryColor,
+                                                  position: VxToastPosition.top,
+                                                  textColor:
+                                                      context.theme.accentColor,
+                                                  showTime: 4000);
+                                            } else {
+                                              context.showToast(
+                                                  msg: "Impossible",
+                                                  bgColor: context
+                                                      .theme.primaryColor,
+                                                  position: VxToastPosition.top,
+                                                  textColor:
+                                                      context.theme.accentColor,
+                                                  showTime: 4000);
+                                            }
+
                                             context.pop();
-                                            context.showToast(
-                                                msg: "Laisse moi réfléchir",
-                                                bgColor:
-                                                    context.theme.primaryColor,
-                                                position: VxToastPosition.top,
-                                                textColor:
-                                                    context.theme.accentColor,
-                                                showTime: 4000);
                                           },
                                           child: Text("Changer"),
                                         ),
@@ -82,7 +105,6 @@ class MenuScreen extends StatelessWidget {
                                     ));
                           },
                           child: Row(
-                            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               SizedBox(
                                 width: 20,
@@ -119,7 +141,7 @@ class MenuScreen extends StatelessWidget {
                                         controller: textctrl,
                                       )),
                                       actions: [
-                                        RaisedButton(
+                                        ElevatedButton(
                                           onPressed: () {
                                             context.pop();
                                             context.showToast(
@@ -566,7 +588,7 @@ class MenuScreen extends StatelessWidget {
                       height: 20,
                     ),
                     Text(
-                      "Version: 3.0.0",
+                      "Version: " + version,
                       style: TextStyle(
                           fontWeight: FontWeight.w300,
                           color:

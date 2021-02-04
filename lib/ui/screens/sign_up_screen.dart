@@ -259,7 +259,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               validator: (value) =>
-                  value.isEmpty ? 'Veuillez choisir un pseudo' : null,
+                  value.isEmpty ? 'Veuillez choisir une image' : null,
               controller: picController,
             ),
           ),
